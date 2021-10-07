@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public abstract class DefaultInMemoryRepository<T> implements InMemoryRepository<T> {
 
-    private Map<Integer, T> database;
+    protected Map<Integer, T> database;
 
     public DefaultInMemoryRepository() {
         this.database = new HashMap<>();
