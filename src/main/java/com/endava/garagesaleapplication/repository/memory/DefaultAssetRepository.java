@@ -11,7 +11,6 @@ import java.util.List;
 @Repository("assetRepository")
 public class DefaultAssetRepository extends DefaultInMemoryRepository<Asset> {
 
-
     public DefaultAssetRepository() {
         if (super.database.isEmpty()) {
             super.database.put(

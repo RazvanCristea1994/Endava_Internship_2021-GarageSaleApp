@@ -5,13 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Asset {
+public class Asset implements Serializable {
 
     private Integer id;
     private Category category;
@@ -19,8 +20,7 @@ public class Asset {
     private List<String> issues;
     private int quantity;
 
-    public Asset(Integer id, Category category) {
+    public Asset(Integer id) {
         this.id = id;
-        this.category = category;
     }
 }

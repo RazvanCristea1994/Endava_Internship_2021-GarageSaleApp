@@ -25,6 +25,6 @@ public class CardRequest {
     private final LocalDate expiry;
 
     @NotNull(message = "This is a required field ")
-    @Pattern(regexp = "[//d]{3}", message = "CIV length must be 3 ")
+    @Pattern(regexp = "[\\d]{3}", message = "CIV length must be 3 ")
     private final String civ;
 }

@@ -5,13 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ShoppingCart {
+public class Order implements Serializable {
 
     private Integer id;
     private List<Asset> assetList;
@@ -20,7 +21,7 @@ public class ShoppingCart {
     private Card card;
     private Double totalPrice;
 
-    public ShoppingCart(List<Asset> assetList, String customerName, String email, Card card) {
+    public Order(List<Asset> assetList, String customerName, String email, Card card) {
         this.assetList = assetList;
         this.customerName = customerName;
         this.email = email;
