@@ -8,10 +8,11 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class AssetResponse {
+public class AssetStockResponse {
 
     private final Integer id;
     private final CategoryResponse categoryResponse;
     private final double Price;
     private final List<String> issues;
+    private final int quantity;
 }

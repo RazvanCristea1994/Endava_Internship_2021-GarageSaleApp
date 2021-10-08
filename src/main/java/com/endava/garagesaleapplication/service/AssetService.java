@@ -12,4 +12,6 @@ public interface AssetService {
     Asset getAsset(Integer id);
 
     Order findAssetsInStock(Order order);
+
+    void decrementAssets(List<Asset> assetList);
 }

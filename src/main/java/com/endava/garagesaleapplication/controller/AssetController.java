@@ -1,6 +1,6 @@
 package com.endava.garagesaleapplication.controller;
 
-import com.endava.garagesaleapplication.data.asset.AssetResponse;
+import com.endava.garagesaleapplication.data.asset.AssetStockResponse;
 import com.endava.garagesaleapplication.facade.asset.AssetFacade;
 import com.endava.garagesaleapplication.service.AssetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +24,9 @@ public class AssetController {
 
     @GetMapping(value = "/all")
     @ResponseBody
-    public ResponseEntity<List<AssetResponse>> getAll() {
-        List<AssetResponse> assetResponseList = this.assetFacade.getAssetResponse(this.assetService.getAllAssets());
+    public ResponseEntity<List<AssetStockResponse>> getAll() {
+        List<AssetStockResponse> assetStockResponse = this.assetFacade.getAssetStockResponse(this.assetService.getAllAssets());
 
-        return ResponseEntity.ok(assetResponseList);
+        return ResponseEntity.ok(assetStockResponse);
     }
 }

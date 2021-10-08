@@ -42,6 +42,8 @@ public class DefaultOrderService implements OrderService {
         }
         this.cardRepository.save(order.getCard());
 
+        this.assetService.decrementAssets(order.getAssetList());
+
         return order;
     }
 

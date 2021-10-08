@@ -2,7 +2,6 @@ package com.endava.garagesaleapplication.service.impl;
 
 import com.endava.garagesaleapplication.model.Asset;
 import com.endava.garagesaleapplication.model.Order;
-import com.endava.garagesaleapplication.repository.memory.DefaultAssetRepository;
 import com.endava.garagesaleapplication.repository.memory.InMemoryRepository;
 import com.endava.garagesaleapplication.service.AssetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +52,16 @@ public class DefaultAssetService implements AssetService {
         }
         order.setAssetList(assetList);
         return order;
+    }
+
+    @Override
+    public void decrementAssets(List<Asset> assetList) {
+
+        assetList.forEach(
+                asset -> {
+                    asset.setQuantity(asset.getQuantity() - 1);
+                    this.assetRepository.update(asset);
+                }
+        );
     }
 }
