@@ -18,7 +18,6 @@ public class Asset implements Serializable {
     private Category category;
     private double Price;
     private List<String> issues;
-    private int quantity;
 
     public Asset(Integer id) {
         this.id = id;

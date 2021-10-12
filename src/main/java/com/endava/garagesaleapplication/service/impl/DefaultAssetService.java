@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service("assetService")
 public class DefaultAssetService implements AssetService {
@@ -18,8 +19,11 @@ public class DefaultAssetService implements AssetService {
     private InMemoryRepository<Asset> assetRepository;
 
     @Override
-    public List<Asset> getAllAssets() {
-        return this.assetRepository.getAll();
+    public List<Asset> getAllAvailableAssets() {
+        List<Asset> assetList = this.assetRepository.getAll();
+        assetList = getOnlyAvailableAssets(assetList);
+
+        return assetList;
     }
 
     @Override
@@ -32,15 +36,15 @@ public class DefaultAssetService implements AssetService {
     }
 
     @Override
-    public Order findAssetsInStock(Order order) {
+    public List<Asset> findOrderedAssetsInDB(Order order) {
 
         StringBuilder message = new StringBuilder();
         List<Asset> assetList = new ArrayList<>();
         order.getAssetList().forEach(
                 (asset) -> {
                     Optional<Asset> assetToFind = this.assetRepository.get(asset.getId());
-                    if (!assetToFind.isPresent()) {
-                        message.append(asset + " \n");
+                    if (!assetToFind.isPresent() || assetToFind.get().getCategory().getQuantity() < 1) {
+                        message.append(asset.getId() + ", ");
                     } else {
                         assetList.add(assetToFind.get());
                     }
@@ -48,10 +52,10 @@ public class DefaultAssetService implements AssetService {
         );
 
         if (message.length() != 0) {
-            throw new IllegalArgumentException("The following assets are not available: \n" + message);
+            throw new IllegalArgumentException("The following assets are not available: " + message);
         }
-        order.setAssetList(assetList);
-        return order;
+
+        return assetList;
     }
 
     @Override
@@ -59,9 +63,21 @@ public class DefaultAssetService implements AssetService {
 
         assetList.forEach(
                 asset -> {
-                    asset.setQuantity(asset.getQuantity() - 1);
+                    asset.getCategory().setQuantity(asset.getCategory().getQuantity() - 1);
                     this.assetRepository.update(asset);
                 }
         );
+    }
+
+    @Override
+    public void deleteAssetList(List<Asset> assetList) {
+        assetList.forEach(
+                asset -> this.assetRepository.delete(asset.getId()));
+    }
+
+    private List<Asset> getOnlyAvailableAssets(List<Asset> assetList) {
+        return assetList.stream()
+                .filter(asset -> asset.getCategory().getQuantity() > 0)
+                .collect(Collectors.toList());
     }
 }

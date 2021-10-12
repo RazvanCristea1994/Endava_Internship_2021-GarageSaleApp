@@ -14,5 +14,4 @@ public class AssetStockResponse {
     private final CategoryResponse categoryResponse;
     private final double Price;
     private final List<String> issues;
-    private final int quantity;
 }

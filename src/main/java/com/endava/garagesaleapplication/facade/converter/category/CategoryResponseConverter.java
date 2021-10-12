@@ -12,7 +12,8 @@ public class CategoryResponseConverter implements Converter<CategoryResponse, Ca
     public CategoryResponse convert(Category category) {
         return new CategoryResponse(
                 category.getId(),
-                category.getName()
+                category.getName(),
+                category.getQuantity()
         );
     }
 }

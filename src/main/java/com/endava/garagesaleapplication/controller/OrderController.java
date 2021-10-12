@@ -34,7 +34,24 @@ public class OrderController {
     @ResponseBody
     public ResponseEntity<OrderResponse> placeOrder(
             @Valid @RequestBody OrderRequest orderRequest, BindingResult bindingResult) {
+        checkOrderRequestFieldsValidity(orderRequest, bindingResult);
 
+        try {
+            OrderResponse orderResponse = handleOrderFlow(orderRequest);
+            return ResponseEntity.ok(orderResponse);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
+    }
+
+    @GetMapping("/all")
+    @ResponseBody
+    public ResponseEntity<List<OrderResponse>> getAll() {
+        List<OrderResponse> orderResponseList = this.orderFacade.getAll(this.orderService.getAll());
+        return ResponseEntity.ok(orderResponseList);
+    }
+
+    private void checkOrderRequestFieldsValidity(OrderRequest orderRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder stringBuilder = new StringBuilder();
             List<FieldError> errorList = bindingResult.getFieldErrors();
@@ -42,23 +59,13 @@ public class OrderController {
 
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, stringBuilder.toString(), new IllegalArgumentException());
-        } else {
-            try {
-                Order order = this.orderService.placeOrder(this.orderFacade.getOrder(orderRequest));
-                OrderResponse orderResponse = this.orderFacade.getOrderResponse(order);
-
-                return ResponseEntity.ok(orderResponse);
-            } catch (Exception e) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-            }
         }
     }
 
-    @GetMapping("/all")
-    @ResponseBody
-    public ResponseEntity<List<OrderResponse>> getAll() {
+    private OrderResponse handleOrderFlow(OrderRequest orderRequest) {
+        Order order = this.orderService.placeOrder(this.orderFacade.convertToOrder(orderRequest));
+        OrderResponse orderResponse = this.orderFacade.convertToOrderResponse(order);
 
-        List<OrderResponse> orderResponseList = this.orderFacade.getAll(this.orderService.getAll());
-        return ResponseEntity.ok(orderResponseList);
+        return orderResponse;
     }
 }

@@ -22,10 +22,10 @@ public class AssetController {
     @Autowired
     private AssetFacade assetFacade;
 
-    @GetMapping(value = "/all")
+    @GetMapping()
     @ResponseBody
     public ResponseEntity<List<AssetStockResponse>> getAll() {
-        List<AssetStockResponse> assetStockResponse = this.assetFacade.getAssetStockResponse(this.assetService.getAllAssets());
+        List<AssetStockResponse> assetStockResponse = this.assetFacade.getAssetStockResponse(this.assetService.getAllAvailableAssets());
 
         return ResponseEntity.ok(assetStockResponse);
     }

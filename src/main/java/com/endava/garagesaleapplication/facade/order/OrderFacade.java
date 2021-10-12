@@ -8,11 +8,9 @@ import java.util.List;
 
 public interface OrderFacade {
 
-    Order getOrder(OrderRequest orderRequest);
+    Order convertToOrder(OrderRequest orderRequest);
 
-    OrderResponse getOrderResponse(Order order);
+    OrderResponse convertToOrderResponse(Order order);
 
     List<OrderResponse> getAll(List<Order> orderList);
-
-    void delete(Integer id);
 }

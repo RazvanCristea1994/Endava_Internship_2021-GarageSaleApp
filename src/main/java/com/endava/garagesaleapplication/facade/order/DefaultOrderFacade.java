@@ -19,22 +19,17 @@ public class DefaultOrderFacade implements OrderFacade {
     private Converter<OrderResponse, Order> orderResponseConverter;
 
     @Override
-    public Order getOrder(OrderRequest orderRequest) {
+    public Order convertToOrder(OrderRequest orderRequest) {
         return this.orderConverter.convert(orderRequest);
     }
 
     @Override
-    public OrderResponse getOrderResponse(Order order) {
+    public OrderResponse convertToOrderResponse(Order order) {
         return this.orderResponseConverter.convert(order);
     }
 
     @Override
     public List<OrderResponse> getAll(List<Order> orderList) {
         return this.orderResponseConverter.convertAll(orderList);
-    }
-
-    @Override
-    public void delete(Integer id) {
-
     }
 }
