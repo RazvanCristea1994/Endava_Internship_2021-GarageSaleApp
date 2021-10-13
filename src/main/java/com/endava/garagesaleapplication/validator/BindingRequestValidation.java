@@ -1,10 +1,9 @@
 package com.endava.garagesaleapplication.validator;
 
-import org.springframework.http.HttpStatus;
+import com.endava.garagesaleapplication.controller.exception.customexception.ConstraintsNotRespected;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -17,8 +16,7 @@ public final class BindingRequestValidation {
             List<FieldError> errorList = bindingResult.getFieldErrors();
             errorList.forEach(errorField -> stringBuilder.append(errorField.getDefaultMessage()));
 
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, stringBuilder.toString(), new IllegalArgumentException());
+            throw new ConstraintsNotRespected(stringBuilder.toString());
         }
     }
 }

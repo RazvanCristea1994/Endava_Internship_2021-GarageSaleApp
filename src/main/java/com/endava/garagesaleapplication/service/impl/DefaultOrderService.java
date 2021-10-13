@@ -23,7 +23,8 @@ public class DefaultOrderService implements OrderService {
     @Autowired
     private InMemoryRepository<Order> orderRepository;
 
-    @Autowired InMemoryRepository<Asset> assetRepository;
+    @Autowired
+    InMemoryRepository<Asset> assetRepository;
 
     @Autowired
     private InMemoryRepository<Card> cardRepository;

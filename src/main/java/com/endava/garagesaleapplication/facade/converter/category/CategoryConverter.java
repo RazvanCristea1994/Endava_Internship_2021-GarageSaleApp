@@ -14,4 +14,3 @@ public class CategoryConverter implements Converter<Category, CategoryRequest> {
                 withId(categoryRequest.getId()).build();
     }
 }
-
