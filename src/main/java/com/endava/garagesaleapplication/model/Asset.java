@@ -16,11 +16,17 @@ public class Asset implements Serializable {
 
     private Integer id;
     private Category category;
-    private double Price;
+    private double price;
     private List<String> issues;
     private int quantity;
 
     public Asset(Integer id) {
         this.id = id;
+    }
+
+    public Asset(Category category, double price, List<String> issues) {
+        this.category = category;
+        this.price = price;
+        this.issues = issues;
     }
 }

@@ -17,7 +17,6 @@ public class AssetResponseConverter implements Converter<AssetResponse, Asset> {
     @Override
     public AssetResponse convert(Asset asset) {
         return new AssetResponse(
-                asset.getId(),
                 this.assetResponseConverter.convert(asset.getCategory()),
                 asset.getPrice(),
                 asset.getIssues()

@@ -1,6 +1,7 @@
 package com.endava.garagesaleapplication.service.impl;
 
 import com.endava.garagesaleapplication.model.Asset;
+import com.endava.garagesaleapplication.model.Category;
 import com.endava.garagesaleapplication.model.Order;
 import com.endava.garagesaleapplication.repository.memory.InMemoryRepository;
 import com.endava.garagesaleapplication.service.AssetService;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service("assetService")
 public class DefaultAssetService implements AssetService {
@@ -17,9 +19,45 @@ public class DefaultAssetService implements AssetService {
     @Autowired
     private InMemoryRepository<Asset> assetRepository;
 
+    @Autowired
+    private InMemoryRepository<Category> categoryRepository;
+
+    public static Integer id = 0;
+
     @Override
-    public List<Asset> getAllAssets() {
-        return this.assetRepository.getAll();
+    public Asset save(Asset newAsset) {
+        validations(newAsset);
+        setAssetFields(newAsset);
+        saveRequestInDb(newAsset);
+
+        return newAsset;
+    }
+
+    private void validations(Asset newAsset) {
+        findCategoryInDb(newAsset.getCategory().getId());
+    }
+
+    private void findCategoryInDb(Integer categoryToFindId) {
+        Optional<Category> categoryOptional = this.categoryRepository.get(categoryToFindId);
+        if (categoryOptional.isEmpty()) {
+            throw new IllegalArgumentException("The selected category does not exist ");
+        }
+    }
+
+    private void setAssetFields(Asset newAsset) {
+        newAsset.setId(id++);
+    }
+
+    private void saveRequestInDb(Asset newAsset) {
+        this.assetRepository.save(newAsset);
+    }
+
+    @Override
+    public List<Asset> getAllAvailableAssets() {
+        List<Asset> assetList = this.assetRepository.getAll();
+        assetList = getOnlyAvailableAssets(assetList);
+
+        return assetList;
     }
 
     @Override
@@ -32,15 +70,14 @@ public class DefaultAssetService implements AssetService {
     }
 
     @Override
-    public Order findAssetsInStock(Order order) {
-
+    public List<Asset> findOrderedAssetsInDb(Order order) {
         StringBuilder message = new StringBuilder();
         List<Asset> assetList = new ArrayList<>();
         order.getAssetList().forEach(
                 (asset) -> {
                     Optional<Asset> assetToFind = this.assetRepository.get(asset.getId());
-                    if (!assetToFind.isPresent()) {
-                        message.append(asset + " \n");
+                    if (!assetToFind.isPresent() || assetToFind.get().getQuantity() < 1) {
+                        message.append(asset.getId() + "   ");
                     } else {
                         assetList.add(assetToFind.get());
                     }
@@ -48,20 +85,31 @@ public class DefaultAssetService implements AssetService {
         );
 
         if (message.length() != 0) {
-            throw new IllegalArgumentException("The following assets are not available: \n" + message);
+            throw new IllegalArgumentException("The following assets are not available [ID]: " + message);
         }
-        order.setAssetList(assetList);
-        return order;
+
+        return assetList;
     }
 
     @Override
     public void decrementAssets(List<Asset> assetList) {
-
         assetList.forEach(
                 asset -> {
                     asset.setQuantity(asset.getQuantity() - 1);
                     this.assetRepository.update(asset);
                 }
         );
+    }
+
+    @Override
+    public void deleteAssetList(List<Asset> assetList) {
+        assetList.forEach(
+                asset -> this.assetRepository.delete(asset.getId()));
+    }
+
+    private List<Asset> getOnlyAvailableAssets(List<Asset> assetList) {
+        return assetList.stream()
+                .filter(asset -> asset.getQuantity() > 0)
+                .collect(Collectors.toList());
     }
 }

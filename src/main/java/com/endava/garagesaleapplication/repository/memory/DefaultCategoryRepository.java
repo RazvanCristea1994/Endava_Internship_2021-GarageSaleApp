@@ -1,13 +1,13 @@
 package com.endava.garagesaleapplication.repository.memory;
 
-import com.endava.garagesaleapplication.model.Asset;
+import com.endava.garagesaleapplication.model.Category;
 import org.springframework.stereotype.Repository;
 
 @Repository("categoryRepository")
-public class DefaultCategoryRepository extends DefaultInMemoryRepository<Asset> {
+public class DefaultCategoryRepository extends DefaultInMemoryRepository<Category> {
 
     @Override
-    public Integer getIdForEntity(Asset entity) {
-        return entity.getId();
+    public Integer getIdForEntity(Category category) {
+        return category.getId();
     }
 }

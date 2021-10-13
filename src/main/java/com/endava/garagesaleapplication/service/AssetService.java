@@ -7,11 +7,15 @@ import java.util.List;
 
 public interface AssetService {
 
-    List<Asset> getAllAssets();
+    Asset save(Asset newAsset);
+
+    List<Asset> getAllAvailableAssets();
 
     Asset getAsset(Integer id);
 
-    Order findAssetsInStock(Order order);
+    List<Asset> findOrderedAssetsInDb(Order order);
 
     void decrementAssets(List<Asset> assetList);
+
+    void deleteAssetList(List<Asset> assetList);
 }

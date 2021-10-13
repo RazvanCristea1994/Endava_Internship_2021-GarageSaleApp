@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 public class EmailValidation {
 
     public static String checkEmailValidity(String email) {
-
         if (!EmailValidator.getInstance().isValid(email)) {
             throw new IllegalArgumentException("Invalid email format ");
         }

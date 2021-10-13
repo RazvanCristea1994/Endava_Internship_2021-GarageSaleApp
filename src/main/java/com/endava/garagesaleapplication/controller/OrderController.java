@@ -5,11 +5,11 @@ import com.endava.garagesaleapplication.data.order.OrderResponse;
 import com.endava.garagesaleapplication.facade.order.OrderFacade;
 import com.endava.garagesaleapplication.model.Order;
 import com.endava.garagesaleapplication.service.OrderService;
+import com.endava.garagesaleapplication.validator.BindingRequestValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,31 +34,25 @@ public class OrderController {
     @ResponseBody
     public ResponseEntity<OrderResponse> placeOrder(
             @Valid @RequestBody OrderRequest orderRequest, BindingResult bindingResult) {
+        BindingRequestValidation.check(bindingResult);
 
-        if (bindingResult.hasErrors()) {
-            StringBuilder stringBuilder = new StringBuilder();
-            List<FieldError> errorList = bindingResult.getFieldErrors();
-            errorList.forEach(errorField -> stringBuilder.append(errorField.getDefaultMessage()));
-
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, stringBuilder.toString(), new IllegalArgumentException());
-        } else {
-            try {
-                Order order = this.orderService.placeOrder(this.orderFacade.getOrder(orderRequest));
-                OrderResponse orderResponse = this.orderFacade.getOrderResponse(order);
-
-                return ResponseEntity.ok(orderResponse);
-            } catch (Exception e) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-            }
+        try {
+            OrderResponse orderResponse = handleOrderFlow(orderRequest);
+            return ResponseEntity.ok(orderResponse);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
 
     @GetMapping("/all")
     @ResponseBody
     public ResponseEntity<List<OrderResponse>> getAll() {
-
         List<OrderResponse> orderResponseList = this.orderFacade.getAll(this.orderService.getAll());
         return ResponseEntity.ok(orderResponseList);
+    }
+
+    private OrderResponse handleOrderFlow(OrderRequest orderRequest) {
+        Order order = this.orderService.placeOrder(this.orderFacade.convertToOrder(orderRequest));
+        return this.orderFacade.convertToOrderResponse(order);
     }
 }
