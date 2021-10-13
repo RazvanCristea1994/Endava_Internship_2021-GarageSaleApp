@@ -22,30 +22,34 @@ public class DefaultAssetService implements AssetService {
     @Autowired
     private InMemoryRepository<Category> categoryRepository;
 
-    public static Integer id = 0;
+    public static Integer id = 6;
 
     @Override
     public Asset save(Asset newAsset) {
-        validations(newAsset);
-        setAssetFields(newAsset);
+        validationExecutor(newAsset);
+        Category category = findCategoryInDb(newAsset.getCategory().getId());
+        setAssetFields(newAsset, category);
         saveRequestInDb(newAsset);
 
         return newAsset;
     }
 
-    private void validations(Asset newAsset) {
+    private void validationExecutor(Asset newAsset) {
         findCategoryInDb(newAsset.getCategory().getId());
     }
 
-    private void findCategoryInDb(Integer categoryToFindId) {
+    private Category findCategoryInDb(Integer categoryToFindId) {
         Optional<Category> categoryOptional = this.categoryRepository.get(categoryToFindId);
         if (categoryOptional.isEmpty()) {
             throw new IllegalArgumentException("The selected category does not exist ");
         }
+
+        return categoryOptional.get();
     }
 
-    private void setAssetFields(Asset newAsset) {
+    private void setAssetFields(Asset newAsset, Category category) {
         newAsset.setId(id++);
+        newAsset.setCategory(category);
     }
 
     private void saveRequestInDb(Asset newAsset) {

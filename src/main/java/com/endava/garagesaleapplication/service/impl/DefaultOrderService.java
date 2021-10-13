@@ -6,6 +6,7 @@ import com.endava.garagesaleapplication.model.Order;
 import com.endava.garagesaleapplication.repository.memory.InMemoryRepository;
 import com.endava.garagesaleapplication.service.AssetService;
 import com.endava.garagesaleapplication.service.OrderService;
+import com.endava.garagesaleapplication.validator.CardValidation;
 import com.endava.garagesaleapplication.validator.EmailValidation;
 import com.endava.garagesaleapplication.validator.OrderValidation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,7 @@ public class DefaultOrderService implements OrderService {
     private void validationsExecutor(Order order) {
         OrderValidation.checkOrderValidity(order.getAssetList());
         EmailValidation.checkEmailValidity(order.getEmail());
-        //card validation here
+        CardValidation.cardNumberValidation(order.getCard().getCardNumber());
     }
 
     private void setOrderFields(Order order, List<Asset> assetList) {
@@ -71,6 +72,5 @@ public class DefaultOrderService implements OrderService {
 
     private void updateDb(Order order) {
         this.assetService.decrementAssets(order.getAssetList());
-        //this.assetService.deleteAssetList(order.getAssetList());
     }
 }

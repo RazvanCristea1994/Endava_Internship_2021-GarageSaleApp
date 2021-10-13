@@ -17,6 +17,7 @@ public class AssetFromNewAssetRequestConverter implements Converter<Asset, NewAs
     public Asset convert(NewAssetRequest newAssetRequest) {
         return new Asset(this.categoryConverter.convert(newAssetRequest.getCategoryRequest()),
                 newAssetRequest.getPrice(),
-                newAssetRequest.getIssues());
+                newAssetRequest.getIssues(),
+                newAssetRequest.getQuantity());
     }
 }

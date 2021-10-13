@@ -24,9 +24,10 @@ public class Asset implements Serializable {
         this.id = id;
     }
 
-    public Asset(Category category, double price, List<String> issues) {
+    public Asset(Category category, double price, List<String> issues, int quantity) {
         this.category = category;
         this.price = price;
         this.issues = issues;
+        this.quantity = quantity;
     }
 }

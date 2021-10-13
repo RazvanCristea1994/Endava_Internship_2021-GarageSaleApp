@@ -4,7 +4,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EmailValidation {
+public final class EmailValidation {
 
     public static String checkEmailValidity(String email) {
         if (!EmailValidator.getInstance().isValid(email)) {

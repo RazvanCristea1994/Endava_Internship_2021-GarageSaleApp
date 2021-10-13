@@ -9,7 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @Component
-public class BindingRequestValidation {
+public final class BindingRequestValidation {
 
     public static void check(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
