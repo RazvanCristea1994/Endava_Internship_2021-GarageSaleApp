@@ -1,5 +1,8 @@
 package com.endava.garagesaleapplication.facade.converter;
 
+import com.endava.garagesaleapplication.data.category.CategoryRequest;
+import com.endava.garagesaleapplication.model.Category;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;

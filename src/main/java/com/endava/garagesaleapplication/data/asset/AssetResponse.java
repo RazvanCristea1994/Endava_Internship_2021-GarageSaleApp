@@ -10,7 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 public class AssetResponse {
 
-    private final Integer id;
     private final CategoryResponse categoryResponse;
     private final double Price;
     private final List<String> issues;

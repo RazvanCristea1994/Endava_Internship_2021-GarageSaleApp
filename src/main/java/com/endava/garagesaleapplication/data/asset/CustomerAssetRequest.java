@@ -7,11 +7,11 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @AllArgsConstructor
-public class AssetRequest {
+public class CustomerAssetRequest {
 
     @NotNull(message = "This is a required field ")
     private Integer id;
 
-    public AssetRequest() {
+    public CustomerAssetRequest() {
     }
 }

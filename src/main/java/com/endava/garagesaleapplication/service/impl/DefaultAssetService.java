@@ -1,6 +1,7 @@
 package com.endava.garagesaleapplication.service.impl;
 
 import com.endava.garagesaleapplication.model.Asset;
+import com.endava.garagesaleapplication.model.Category;
 import com.endava.garagesaleapplication.model.Order;
 import com.endava.garagesaleapplication.repository.memory.InMemoryRepository;
 import com.endava.garagesaleapplication.service.AssetService;
@@ -17,6 +18,39 @@ public class DefaultAssetService implements AssetService {
 
     @Autowired
     private InMemoryRepository<Asset> assetRepository;
+
+    @Autowired
+    private InMemoryRepository<Category> categoryRepository;
+
+    public static Integer id = 0;
+
+    @Override
+    public Asset save(Asset newAsset) {
+        validations(newAsset);
+        setAssetFields(newAsset);
+        saveRequestInDb(newAsset);
+
+        return newAsset;
+    }
+
+    private void validations(Asset newAsset) {
+        findCategoryInDb(newAsset.getCategory().getId());
+    }
+
+    private void findCategoryInDb(Integer categoryToFindId) {
+        Optional<Category> categoryOptional = this.categoryRepository.get(categoryToFindId);
+        if (categoryOptional.isEmpty()) {
+            throw new IllegalArgumentException("The selected category does not exist ");
+        }
+    }
+
+    private void setAssetFields(Asset newAsset) {
+        newAsset.setId(id++);
+    }
+
+    private void saveRequestInDb(Asset newAsset) {
+        this.assetRepository.save(newAsset);
+    }
 
     @Override
     public List<Asset> getAllAvailableAssets() {
@@ -36,15 +70,14 @@ public class DefaultAssetService implements AssetService {
     }
 
     @Override
-    public List<Asset> findOrderedAssetsInDB(Order order) {
-
+    public List<Asset> findOrderedAssetsInDb(Order order) {
         StringBuilder message = new StringBuilder();
         List<Asset> assetList = new ArrayList<>();
         order.getAssetList().forEach(
                 (asset) -> {
                     Optional<Asset> assetToFind = this.assetRepository.get(asset.getId());
-                    if (!assetToFind.isPresent() || assetToFind.get().getCategory().getQuantity() < 1) {
-                        message.append(asset.getId() + ", ");
+                    if (!assetToFind.isPresent() || assetToFind.get().getQuantity() < 1) {
+                        message.append(asset.getId() + "   ");
                     } else {
                         assetList.add(assetToFind.get());
                     }
@@ -52,7 +85,7 @@ public class DefaultAssetService implements AssetService {
         );
 
         if (message.length() != 0) {
-            throw new IllegalArgumentException("The following assets are not available: " + message);
+            throw new IllegalArgumentException("The following assets are not available [ID]: " + message);
         }
 
         return assetList;
@@ -60,10 +93,9 @@ public class DefaultAssetService implements AssetService {
 
     @Override
     public void decrementAssets(List<Asset> assetList) {
-
         assetList.forEach(
                 asset -> {
-                    asset.getCategory().setQuantity(asset.getCategory().getQuantity() - 1);
+                    asset.setQuantity(asset.getQuantity() - 1);
                     this.assetRepository.update(asset);
                 }
         );
@@ -77,7 +109,7 @@ public class DefaultAssetService implements AssetService {
 
     private List<Asset> getOnlyAvailableAssets(List<Asset> assetList) {
         return assetList.stream()
-                .filter(asset -> asset.getCategory().getQuantity() > 0)
+                .filter(asset -> asset.getQuantity() > 0)
                 .collect(Collectors.toList());
     }
 }

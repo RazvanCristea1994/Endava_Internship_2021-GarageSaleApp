@@ -1,6 +1,6 @@
 package com.endava.garagesaleapplication.facade.converter.order;
 
-import com.endava.garagesaleapplication.data.asset.AssetRequest;
+import com.endava.garagesaleapplication.data.asset.CustomerAssetRequest;
 import com.endava.garagesaleapplication.data.card.CardRequest;
 import com.endava.garagesaleapplication.data.order.OrderRequest;
 import com.endava.garagesaleapplication.facade.converter.Converter;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class OrderConverter implements Converter<Order, OrderRequest> {
 
     @Autowired
-    private Converter<Asset, AssetRequest> assetConverter;
+    private Converter<Asset, CustomerAssetRequest> assetConverter;
 
     @Autowired
     private Converter<Card, CardRequest> cardConverter;
@@ -22,7 +22,7 @@ public class OrderConverter implements Converter<Order, OrderRequest> {
     @Override
     public Order convert(OrderRequest orderRequest) {
         return new Order(
-                this.assetConverter.convertAll(orderRequest.getAssetRequestList()),
+                this.assetConverter.convertAll(orderRequest.getCustomerAssetRequestList()),
                 orderRequest.getCustomerName(),
                 orderRequest.getEmail(),
                 this.cardConverter.convert(orderRequest.getCardRequest())

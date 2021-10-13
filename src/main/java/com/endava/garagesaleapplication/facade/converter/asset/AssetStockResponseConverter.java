@@ -20,7 +20,8 @@ public class AssetStockResponseConverter implements Converter<AssetStockResponse
                 asset.getId(),
                 this.assetResponseConverter.convert(asset.getCategory()),
                 asset.getPrice(),
-                asset.getIssues()
+                asset.getIssues(),
+                asset.getQuantity()
         );
     }
 }
