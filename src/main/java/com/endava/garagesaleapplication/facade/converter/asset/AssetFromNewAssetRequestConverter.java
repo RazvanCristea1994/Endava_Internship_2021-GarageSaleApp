@@ -15,9 +15,10 @@ public class AssetFromNewAssetRequestConverter implements Converter<Asset, NewAs
     Converter<Category, CategoryRequest> categoryConverter;
 
     public Asset convert(NewAssetRequest newAssetRequest) {
-        return new Asset(this.categoryConverter.convert(newAssetRequest.getCategoryRequest()),
-                newAssetRequest.getPrice(),
-                newAssetRequest.getIssues(),
-                newAssetRequest.getQuantity());
+        return Asset.AssetBuilder.anAsset()
+                .withCategory(this.categoryConverter.convert(newAssetRequest.getCategoryRequest()))
+                .withPrice(newAssetRequest.getPrice())
+                .withIssues(newAssetRequest.getIssues())
+                .withQuantity(newAssetRequest.getQuantity()).build();
     }
 }

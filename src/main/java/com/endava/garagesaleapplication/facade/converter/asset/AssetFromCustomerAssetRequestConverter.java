@@ -1,7 +1,6 @@
 package com.endava.garagesaleapplication.facade.converter.asset;
 
 import com.endava.garagesaleapplication.data.asset.CustomerAssetRequest;
-import com.endava.garagesaleapplication.data.asset.NewAssetRequest;
 import com.endava.garagesaleapplication.data.category.CategoryRequest;
 import com.endava.garagesaleapplication.facade.converter.Converter;
 import com.endava.garagesaleapplication.model.Asset;
@@ -17,6 +16,7 @@ public class AssetFromCustomerAssetRequestConverter implements Converter<Asset, 
 
     @Override
     public Asset convert(CustomerAssetRequest customerAssetRequest) {
-        return new Asset(customerAssetRequest.getId());
+        return Asset.AssetBuilder.anAsset().
+                withId(customerAssetRequest.getId()).build();
     }
 }
