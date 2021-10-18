@@ -8,6 +8,7 @@ import com.endava.garagesaleapplication.service.AssetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,30 +23,69 @@ public class DefaultAssetService implements AssetService {
     @Autowired
     private InMemoryRepository<Category> categoryRepository;
 
-    public static Integer id = 0;
+    public static Integer id = 4;
+
+    @PostConstruct
+    private void init() {           //ToDo: delete this method after BD implementation
+
+        Category laptop = Category.CategoryBuilder.aCategory()
+                .withId(0)
+                .withName("Laptop").build();
+        Category pc = Category.CategoryBuilder.aCategory()
+                .withId(1)
+                .withName("PC").build();
+
+        this.categoryRepository.save(laptop);
+        this.categoryRepository.save(pc);
+
+        this.assetRepository.save(Asset.AssetBuilder.anAsset()
+                .withId(1)
+                .withCategory(laptop)
+                .withPrice(150)
+                .withIssues(List.of("Missing enter button", "Minor scratches"))
+                .withQuantity(10).build());
+
+        this.assetRepository.save(Asset.AssetBuilder.anAsset()
+                .withId(2)
+                .withCategory(laptop)
+                .withPrice(200)
+                .withIssues(List.of("Minor scratches"))
+                .withQuantity(15).build());
+
+        this.assetRepository.save(Asset.AssetBuilder.anAsset()
+                .withId(3)
+                .withCategory(pc)
+                .withPrice(99)
+                .withIssues(List.of("Minor scratches"))
+                .withQuantity(20).build());
+    }
 
     @Override
     public Asset save(Asset newAsset) {
-        validations(newAsset);
-        setAssetFields(newAsset);
+        validationExecutor(newAsset);
+        Category category = findCategoryInDb(newAsset.getCategory().getId());
+        setAssetFields(newAsset, category);
         saveRequestInDb(newAsset);
 
         return newAsset;
     }
 
-    private void validations(Asset newAsset) {
+    private void validationExecutor(Asset newAsset) {
         findCategoryInDb(newAsset.getCategory().getId());
     }
 
-    private void findCategoryInDb(Integer categoryToFindId) {
+    private Category findCategoryInDb(Integer categoryToFindId) {
         Optional<Category> categoryOptional = this.categoryRepository.get(categoryToFindId);
         if (categoryOptional.isEmpty()) {
             throw new IllegalArgumentException("The selected category does not exist ");
         }
+
+        return categoryOptional.get();
     }
 
-    private void setAssetFields(Asset newAsset) {
+    private void setAssetFields(Asset newAsset, Category category) {
         newAsset.setId(id++);
+        newAsset.setCategory(category);
     }
 
     private void saveRequestInDb(Asset newAsset) {
@@ -77,7 +117,7 @@ public class DefaultAssetService implements AssetService {
                 (asset) -> {
                     Optional<Asset> assetToFind = this.assetRepository.get(asset.getId());
                     if (!assetToFind.isPresent() || assetToFind.get().getQuantity() < 1) {
-                        message.append(asset.getId() + "   ");
+                        message.append("   " + asset.getId());
                     } else {
                         assetList.add(assetToFind.get());
                     }

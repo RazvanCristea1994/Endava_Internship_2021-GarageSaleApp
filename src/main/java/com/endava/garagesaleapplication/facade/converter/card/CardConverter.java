@@ -10,10 +10,10 @@ public class CardConverter implements Converter<Card, CardRequest> {
 
     @Override
     public Card convert(CardRequest cardRequest) {
-        return new Card(cardRequest.getCardHolderName(),
-                cardRequest.getCardNumber(),
-                cardRequest.getExpiry(),
-                cardRequest.getCiv()
-        );
+        return Card.CardBuilder.aCard()
+                .withCardHolderName(cardRequest.getCardHolderName())
+                .withCardNumber(cardRequest.getCardNumber())
+                .withExpiry(cardRequest.getExpiry())
+                .withCiv(cardRequest.getCiv()).build();
     }
 }

@@ -10,6 +10,7 @@ public class CategoryConverter implements Converter<Category, CategoryRequest> {
 
     @Override
     public Category convert(CategoryRequest categoryRequest) {
-        return new Category(categoryRequest.getId());
+        return Category.CategoryBuilder.aCategory().
+                withId(categoryRequest.getId()).build();
     }
 }
