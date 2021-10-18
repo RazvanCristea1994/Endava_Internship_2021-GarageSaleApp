@@ -51,7 +51,7 @@ public class OrderController {
         OrderResponse orderResponse = handleOrderFlow(orderRequest);
 
         //ToDo: Uncomment this only for demo
-        //this.emailService.sendOrderPlacedEmail(orderRequest.getEmail(), "Order placed", orderResponse);
+        this.emailService.sendOrderPlacedEmail(orderRequest.getEmail(), "Order placed", orderResponse);
 
         return ResponseEntity.ok(orderResponse);
     }

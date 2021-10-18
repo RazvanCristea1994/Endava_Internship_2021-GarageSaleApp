@@ -31,9 +31,11 @@ public class DefaultAssetService implements AssetService {
     public Asset save(Asset newAsset) {
         Category category = findCategoryInDb(newAsset.getCategory().getId());
         setFieldsToAsset(newAsset, category);
+
+        Asset savedAsset = saveInDb(newAsset);
         setAssetToIssueAndSaveInDb(newAsset.getIssueList(), newAsset);
 
-        return saveInDb(newAsset);
+        return savedAsset;
     }
 
     @Override
