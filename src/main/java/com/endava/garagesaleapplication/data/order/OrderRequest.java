@@ -15,18 +15,18 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderRequest {
 
-    @NotNull(message = "This is a required field ")
+    @NotNull(message = "[CustomerName] is a required field ")
     @Pattern(regexp = "^[a-zA-Z '-]+$", message = "Wrong name format. Please use only letters and special characters: ' - ")
     private final String customerName;
 
     @Valid
-    @NotNull(message = "This is a required field ")
+    @NotNull(message = "[CustomerAssetList] is a required field ")
     private final List<CustomerAssetRequest> customerAssetRequestList;
 
-    @NotBlank(message = "This is a required field ")
+    @NotBlank(message = "[Email] is a required field ")
     private final String email;
 
     @Valid
-    @NotNull(message = "This is a required field ")
+    @NotNull(message = "[Card] is a required field ")
     private final CardRequest cardRequest;
 }

@@ -21,11 +21,10 @@ public class OrderConverter implements Converter<Order, OrderRequest> {
 
     @Override
     public Order convert(OrderRequest orderRequest) {
-        return new Order(
-                this.assetConverter.convertAll(orderRequest.getCustomerAssetRequestList()),
-                orderRequest.getCustomerName(),
-                orderRequest.getEmail(),
-                this.cardConverter.convert(orderRequest.getCardRequest())
-        );
+        return Order.OrderBuilder.anOrder()
+                .withAssetList(this.assetConverter.convertAll(orderRequest.getCustomerAssetRequestList()))
+                .withCustomerName(orderRequest.getCustomerName())
+                .withEmail(orderRequest.getEmail())
+                .withCard(this.cardConverter.convert(orderRequest.getCardRequest())).build();
     }
 }
