@@ -1,16 +1,19 @@
 package com.endava.garagesaleapplication.service.impl;
 
 import com.endava.garagesaleapplication.model.Asset;
-import com.endava.garagesaleapplication.model.Card;
 import com.endava.garagesaleapplication.model.Order;
-import com.endava.garagesaleapplication.repository.memory.InMemoryRepository;
+import com.endava.garagesaleapplication.repository.database.AssetRepository;
+import com.endava.garagesaleapplication.repository.database.CardRepository;
+import com.endava.garagesaleapplication.repository.database.OrderRepository;
 import com.endava.garagesaleapplication.service.AssetService;
 import com.endava.garagesaleapplication.service.OrderService;
+import com.endava.garagesaleapplication.validator.CardValidation;
 import com.endava.garagesaleapplication.validator.EmailValidation;
 import com.endava.garagesaleapplication.validator.OrderValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service("orderService")
@@ -20,20 +23,24 @@ public class DefaultOrderService implements OrderService {
     private AssetService assetService;
 
     @Autowired
-    private InMemoryRepository<Order> orderRepository;
-
-    @Autowired InMemoryRepository<Asset> assetRepository;
+    private OrderRepository orderRepository;
 
     @Autowired
-    private InMemoryRepository<Card> cardRepository;
+    private AssetRepository assetRepository;
 
-    public static Integer id = 0;
+    @Autowired
+    private CardRepository cardRepository;
 
     @Override
     public Order placeOrder(Order order) {
-        validationsExecutor(order);
+        orderDetailsValidationsExecutor(order);
+
         List<Asset> assetList = assetService.findOrderedAssetsInDb(order);
-        setOrderFields(order, assetList);
+        OrderValidation.checkOneItemPerCategoryCondition(assetList);
+
+        setFieldsToOrder(order, assetList);
+        setOrdersFields(order);
+
         saveRequestInDb(order);
         updateDb(order);
 
@@ -42,7 +49,7 @@ public class DefaultOrderService implements OrderService {
 
     @Override
     public List<Order> getAll() {
-        return this.orderRepository.getAll();
+        return this.orderRepository.findAllAsList();
     }
 
     private double getTotalOrderPrice(Order order) {
@@ -52,16 +59,20 @@ public class DefaultOrderService implements OrderService {
                 .sum();
     }
 
-    private void validationsExecutor(Order order) {
-        OrderValidation.checkOrderValidity(order.getAssetList());
+    private void orderDetailsValidationsExecutor(Order order) {
         EmailValidation.checkEmailValidity(order.getEmail());
-        //card validation here
+        CardValidation.cardNumberValidation(order.getCard().getCardNumber());
     }
 
-    private void setOrderFields(Order order, List<Asset> assetList) {
+    private void setFieldsToOrder(Order order, List<Asset> assetList) {
         order.setAssetList(assetList);
         order.setTotalPrice(getTotalOrderPrice(order));
-        order.setId(DefaultOrderService.id++);
+        order.setOrderDateTime(LocalDateTime.now());
+    }
+
+    private void setOrdersFields(Order order) {
+        order.getCard().setOrder(order);
+        order.getAssetList().forEach(asset -> asset.addToOrderList(order));
     }
 
     private void saveRequestInDb(Order order) {
@@ -71,6 +82,5 @@ public class DefaultOrderService implements OrderService {
 
     private void updateDb(Order order) {
         this.assetService.decrementAssets(order.getAssetList());
-        //this.assetService.deleteAssetList(order.getAssetList());
     }
 }

@@ -3,7 +3,10 @@ package com.endava.garagesaleapplication.repository.memory;
 import com.endava.garagesaleapplication.model.Category;
 import org.springframework.stereotype.Repository;
 
-@Repository("categoryRepository")
+/**
+ * Deprecated after DB connection was implemented
+ */
+@Repository
 public class DefaultCategoryRepository extends DefaultInMemoryRepository<Category> {
 
     @Override

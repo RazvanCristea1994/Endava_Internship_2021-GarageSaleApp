@@ -24,7 +24,8 @@ public class OrderResponseConverter implements Converter<OrderResponse, Order> {
         return new OrderResponse(
                 this.assetResponseConverter.convertAll(order.getAssetList()),
                 order.getTotalPrice(),
-                this.cardResponseConverter.convert(order.getCard())
+                this.cardResponseConverter.convert(order.getCard()),
+                order.getOrderDateTime()
         );
     }
 }

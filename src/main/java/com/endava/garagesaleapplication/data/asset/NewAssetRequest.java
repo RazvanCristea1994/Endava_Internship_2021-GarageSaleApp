@@ -1,6 +1,7 @@
 package com.endava.garagesaleapplication.data.asset;
 
 import com.endava.garagesaleapplication.data.category.CategoryRequest;
+import com.endava.garagesaleapplication.data.issue.IssueRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -8,6 +9,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
@@ -16,19 +18,19 @@ import java.util.List;
 public class NewAssetRequest {
 
     @Valid
-    @NotNull(message = "This is a required field ")
+    @NotNull(message = "[Category] is a required field ")
     private CategoryRequest categoryRequest;
 
-    @NotNull(message = "This is a required field ")
+    @NotNull(message = "[Price] is a required field ")
     @PositiveOrZero(message = "Price cannot be a negative number")
-    @Digits(integer = 8, fraction = 2, message = "Example: 4.99")
-    private double Price;
+    @Digits(integer = 8, fraction = 2, message = "Price example: 4.99")
+    private double price;
 
-    @NotNull(message = "This is a required field ")
-    @NotEmpty(message = "This is a required field ")
-    private List<String> issues;
+    @NotNull(message = "[Issues] is a required field ")
+    @NotEmpty(message = "[Issues] is a required field ")
+    private List<IssueRequest> issues;
 
-    @NotNull(message = "This is a required field ")
-    @PositiveOrZero(message = "Quantity should be bigger than 0 ")
-    private final int quantity;
+    @NotNull(message = "[Quantity] is a required field ")
+    @Positive(message = "[Quantity] must be positive ")
+    private int quantity;
 }

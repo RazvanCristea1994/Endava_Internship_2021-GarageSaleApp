@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class AssetFromCustomerAssetRequestConverter implements Converter<Asset, CustomerAssetRequest> {
 
     @Autowired
-    Converter<Category, CategoryRequest> categoryConverter;
+    private Converter<Category, CategoryRequest> categoryConverter;
 
     @Override
     public Asset convert(CustomerAssetRequest customerAssetRequest) {

@@ -7,6 +7,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CategoryResponse {
 
-    private final Integer id;
     private final String name;
+
+    @Override
+    public String toString() {
+        return "\tCategory: " + name;
+    }
 }

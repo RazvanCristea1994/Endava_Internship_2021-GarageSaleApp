@@ -3,6 +3,9 @@ package com.endava.garagesaleapplication.repository.memory;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Deprecated after DB connection was implemented
+ */
 public interface InMemoryRepository<T> {
 
     Optional<T> save(T entity);

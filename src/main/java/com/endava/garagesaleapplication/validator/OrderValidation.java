@@ -11,7 +11,7 @@ import java.util.Map;
 @Component
 public final class OrderValidation {
 
-    public static void checkOrderValidity(List<Asset> assetList) {
+    public static void checkOneItemPerCategoryCondition(List<Asset> assetList) {
         checkIfEmpty(assetList);
         checkOneAssetPerCategoryCondition(assetList);
     }

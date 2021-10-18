@@ -10,9 +10,6 @@ public class CategoryResponseConverter implements Converter<CategoryResponse, Ca
 
     @Override
     public CategoryResponse convert(Category category) {
-        return new CategoryResponse(
-                category.getId(),
-                category.getName()
-        );
+        return new CategoryResponse(category.getName());
     }
 }

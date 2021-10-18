@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Deprecated after DB connection was implemented
+ */
 public abstract class DefaultInMemoryRepository<T> implements InMemoryRepository<T> {
 
     protected Map<Integer, T> database;

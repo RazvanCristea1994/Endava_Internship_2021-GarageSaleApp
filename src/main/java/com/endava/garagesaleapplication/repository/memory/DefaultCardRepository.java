@@ -3,7 +3,10 @@ package com.endava.garagesaleapplication.repository.memory;
 import com.endava.garagesaleapplication.model.Card;
 import org.springframework.stereotype.Repository;
 
-@Repository("cardRepository")
+/**
+ * Deprecated after DB connection was implemented
+ */
+@Repository
 public class DefaultCardRepository extends DefaultInMemoryRepository<Card> {
 
     @Override

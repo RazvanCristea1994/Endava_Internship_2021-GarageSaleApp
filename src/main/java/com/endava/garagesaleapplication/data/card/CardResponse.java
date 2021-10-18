@@ -13,4 +13,13 @@ public class CardResponse {
     public CardResponse(String cardHolderName) {
         this.cardHolderName = cardHolderName;
     }
+
+    @Override
+    public String toString() {
+        return "\nCard details: \n" +
+                "Card Holder Name: " + cardHolderName + '\n' +
+                "Card Number: " + cardNumber + '\n' +
+                "Expiry: " + expiry + '\n' +
+                "CIV: " + civ + "\n";
+    }
 }
