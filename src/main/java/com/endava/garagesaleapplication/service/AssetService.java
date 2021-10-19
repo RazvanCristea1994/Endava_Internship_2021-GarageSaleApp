@@ -11,11 +11,11 @@ public interface AssetService {
 
     List<Asset> getAllAvailableAssets();
 
-    Asset getAsset(Integer id);
+    Asset findById(Integer id);
 
     List<Asset> findOrderedAssetsInDb(Order order);
 
-    void decrementAssets(List<Asset> assetList);
+    void decrementAssetsByOne(List<Asset> assetList);
 
     void deleteAssetList(List<Asset> assetList);
 }
