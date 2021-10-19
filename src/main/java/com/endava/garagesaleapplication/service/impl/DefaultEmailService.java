@@ -22,8 +22,8 @@ public class DefaultEmailService implements EmailService {
     /**
      * This method structures the steps for sending an email after an order was placed
      *
-     * @param to the email of the client
-     * @param subject of the email
+     * @param to            the email of the client
+     * @param subject       of the email
      * @param orderResponse contains the details of the order that will be shown to the client in the email
      */
     @Override

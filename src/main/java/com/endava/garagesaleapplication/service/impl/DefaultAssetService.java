@@ -164,7 +164,7 @@ public class DefaultAssetService implements AssetService {
      * Then each issue is saved in the database
      *
      * @param issueList the list of issues corresponding to the product
-     * @param asset the asset to set
+     * @param asset     the asset to set
      */
     private void setAssetToIssueAndSaveInDb(List<Issue> issueList, Asset asset) {
         issueList.forEach(issue -> {

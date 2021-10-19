@@ -89,10 +89,10 @@ public class DefaultOrderService implements OrderService {
     /**
      * This method sets to order the fields that are not requested to the client and
      * field indicated by the client and previously taken from the database
-     *
+     * <p>
      * The products that are set should be previously taken from DB (this will provide the foreign key later on when saved)
      *
-     * @param order sent by the client
+     * @param order     sent by the client
      * @param assetList the list of products from db are set to the order
      */
     private void setFieldsToOrder(Order order, List<Asset> assetList) {
