@@ -21,7 +21,8 @@ public class OrderConverter implements Converter<Order, OrderRequest> {
 
     @Override
     public Order convert(OrderRequest orderRequest) {
-        return Order.OrderBuilder.anOrder()
+        return Order.OrderBuilder
+                .anOrder()
                 .withAssetList(this.assetConverter.convertAll(orderRequest.getCustomerAssetRequestList()))
                 .withCustomerName(orderRequest.getCustomerName())
                 .withEmail(orderRequest.getEmail())

@@ -52,6 +52,7 @@ public class Card implements Serializable {
         private String cardNumber;
         private LocalDate expiry;
         private String civ;
+        private Order order;
 
         private CardBuilder() {
         }
@@ -85,6 +86,11 @@ public class Card implements Serializable {
             return this;
         }
 
+        public CardBuilder withOrder(Order order) {
+            this.order = order;
+            return this;
+        }
+
         public Card build() {
             Card card = new Card();
             card.setId(id);
@@ -92,6 +98,7 @@ public class Card implements Serializable {
             card.setCardNumber(cardNumber);
             card.setExpiry(expiry);
             card.setCiv(civ);
+            card.setOrder(order);
             return card;
         }
     }

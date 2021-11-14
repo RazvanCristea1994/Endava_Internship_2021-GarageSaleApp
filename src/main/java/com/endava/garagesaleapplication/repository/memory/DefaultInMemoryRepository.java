@@ -33,9 +33,7 @@ public abstract class DefaultInMemoryRepository<T> implements InMemoryRepository
     public List<T> getAll() {
 
         List<T> results = new ArrayList<>();
-        for (T entity : database.values()) {
-            results.add(entity);
-        }
+        results.addAll(database.values());
 
         return results;
     }

@@ -1,5 +1,6 @@
 package com.endava.garagesaleapplication.controller;
 
+import com.endava.garagesaleapplication.controller.exception.ControllerExceptionHandler;
 import com.endava.garagesaleapplication.data.order.OrderRequest;
 import com.endava.garagesaleapplication.data.order.OrderResponse;
 import com.endava.garagesaleapplication.facade.order.OrderFacade;
@@ -34,6 +35,9 @@ public class OrderController {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private ControllerExceptionHandler exceptionHandler;
+
     /**
      * API exposing creation of an order
      *
@@ -50,8 +54,7 @@ public class OrderController {
 
         OrderResponse orderResponse = handleOrderFlow(orderRequest);
 
-        //ToDo: Uncomment this only for demo
-        //this.emailService.sendOrderPlacedEmail(orderRequest.getEmail(), "Order placed", orderResponse);
+        this.emailService.sendOrderPlacedEmail(orderRequest.getEmail(), "Order placed", orderResponse);
 
         return ResponseEntity.ok(orderResponse);
     }
@@ -66,6 +69,7 @@ public class OrderController {
     @Operation(summary = "Gets all the order history")
     public ResponseEntity<List<OrderResponse>> getAll() {
         List<OrderResponse> orderResponseList = this.orderFacade.getAll(this.orderService.getAll());
+
         return ResponseEntity.ok(orderResponseList);
     }
 
